@@ -25,6 +25,7 @@ This is valuable because official documentation is verbose, while this system al
      Aim for variety — sources that together cover different subtopics or perspectives. -->
 All documents are local .txt files under documents/spark, each extracted from sections of Apache Spark documentation on spark.apache.org and split by topic.
 
+'''text
 +----+-------------+--------------------------------------------+-----------------------------------------------------------------------------+
 | #  |   Source    |                Description                 |                               URL or location                               |
 +----+-------------+--------------------------------------------+-----------------------------------------------------------------------------+
@@ -41,7 +42,7 @@ All documents are local .txt files under documents/spark, each extracted from se
 | 11 | Document 11 | ORC Files                                  | documents\spark\Document 11 - ORC Files.txt                                 |
 | 12 | Document 12 | CSV Files                                  | documents\spark\Document 12 - CSV Files.txt                                 |
 +----+-------------+--------------------------------------------+-----------------------------------------------------------------------------+
-
+'''
 
 ---
 
