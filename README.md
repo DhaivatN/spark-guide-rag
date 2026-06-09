@@ -25,18 +25,23 @@ This is valuable because official documentation is verbose, while this system al
      Aim for variety — sources that together cover different subtopics or perspectives. -->
 All documents are local .txt files under documents/spark, each extracted from sections of Apache Spark documentation on spark.apache.org and split by topic.
 
-| # | Source | Type | URL or file path |
-|---|--------|------|-----------------|
-| 1 | | | |
-| 2 | | | |
-| 3 | | | |
-| 4 | | | |
-| 5 | | | |
-| 6 | | | |
-| 7 | | | |
-| 8 | | | |
-| 9 | | | |
-| 10 | | | |
++----+-------------+--------------------------------------------+-----------------------------------------------------------------------------+
+| #  |   Source    |                Description                 |                               URL or location                               |
++----+-------------+--------------------------------------------+-----------------------------------------------------------------------------+
+|  1 | Document 1  | Spark Session and Dataframes               | documents\spark\Document 1 - SparkSession and DataFrames.txt                |
+|  2 | Document 2  | SQL Queries and Global Temporary Views     | documents\spark\Document 2 - SQL Queries and Global Temporary Views.txt     |
+|  3 | Document 3  | RDDs, Scalar and Aggregate Functions       | documents\spark\Document 3 - RDDs, Scalar and Aggregate Functions.txt       |
+|  4 | Document 4  | Performance Tuning, Caching and Partitions | documents\spark\Document 4 - Performance Tuning, Caching and Partitions.txt |
+|  5 | Document 5  | Optimizing Join Strategy                   | documents\spark\Document 5 - Optimizing Join Strategy.txt                   |
+|  6 | Document 6  | Storage Partition and Join                 | documents\spark\Document 6 - Storage Partition and Join.txt                 |
+|  7 | Document 7  | Generic Load and Save Options              | documents\spark\Document 7 - Generic Load and Save Options.txt              |
+|  8 | Document 8  | Generic File Source Options                | documents\spark\Document 8 - Generic File Source Options.txt                |
+|  9 | Document 9  | Parquet Files                              | documents\spark\Document 9 - Parquet Files.txt                              |
+| 10 | Document 10 | JSON Files                                 | documents\spark\Document 10 - JSON Files.txt                                |
+| 11 | Document 11 | ORC Files                                  | documents\spark\Document 11 - ORC Files.txt                                 |
+| 12 | Document 12 | CSV Files                                  | documents\spark\Document 12 - CSV Files.txt                                 |
++----+-------------+--------------------------------------------+-----------------------------------------------------------------------------+
+
 
 ---
 
@@ -117,9 +122,90 @@ When building the context string, each chunk is tagged with its doc_id and chunk
      Be honest — a partially accurate or inaccurate result that you explain well is more
      valuable than a suspiciously perfect result. -->
 
+```text
+.................................................................................................................................................
+: # :         Question          :  Expected answer (short)  :      System response      :     Retrieval quality     :     Response accuracy     :
+:   :                           :                           :       (summarized)        :                           :                           :
+:...:...........................:...........................:...........................:...........................:...........................:
+: 1 : How to programmatically   : Define a StructType       : Described the three-step  : Relevant – top chunks are : Accurate – matches the    :
+:   : define a schema using     : composed of StructFields  : process: create an RDD of : the “Programmatically     : documented pattern and    :
+:   : StructType and            : (name, type, nullable)    : tuples, build a           : Specifying the Schema”    : explains                  :
+:   : StructField in Spark?     : and apply it when         : StructType schema with    : section and examples.     : StructType/StructField    :
+:   :                           : creating the DataFrame,   : StructFields from         :                           : correctly.                :
+:   :                           : e.g. schema =             : pyspark.sql.types, and    :                           :                           :
+:   :                           : StructType([StructField(" : apply it via              :                           :                           :
+:   :                           : name",                    : spark.createDataFrame(peo :                           :                           :
+:   :                           : StringType(), True),      : ple,                      :                           :                           :
+:   :                           : ...]) then                : schema), and showed a     :                           :                           :
+:   :                           : spark.createDataFrame(rdd : code snippet. Cited       :                           :                           :
+:   :                           : ,                         : Document 3, chunk 7.      :                           :                           :
+:   :                           : schema) or                :                           :                           :                           :
+:   :                           : spark.read.schema(schema) :                           :                           :                           :
+:   :                           : ....                      :                           :                           :                           :
+: 2 : What is a global          : Temp view is              : Explained that a global   : Highly relevant –         : Accurate – aligns fully   :
+:   : temporary view and how is : session-scoped and        : temp view is              : retrieval pulled exactly  : with the docs.            :
+:   : it different from a       : disappears when its       : cross-session, tied to    : the “Global Temporary     :                           :
+:   : temporary view?           : SparkSession ends. Global : global_temp, referenced   : View” explanation and     :                           :
+:   :                           : temp view is shared       : as global_temp.view1, and : code examples.            :                           :
+:   :                           : across sessions within    : persists until the Spark  :                           :                           :
+:   :                           : the same application and  : application ends, while a :                           :                           :
+:   :                           : lives until the app       : regular temp view is      :                           :                           :
+:   :                           : terminates; it resides in : session-scoped and        :                           :                           :
+:   :                           : the global_temp database  : disappears with the       :                           :                           :
+:   :                           : and must be referenced as : session. Cited Document   :                           :                           :
+:   :                           : global_temp.view_name.    : 2, chunks 2–3.            :                           :                           :
+: 3 : How does Spark SQL cache  : Spark SQL caches tables   : Answered that Spark SQL   : Relevant – top chunk is   : Partially accurate – core :
+:   : tables and how to uncache : or DataFrames using       : caches tables using       : the “Caching Data”        : behavior                  :
+:   : them?                     : spark.catalog.cacheTable( : spark.catalog.cacheTable( : section and neighboring   : (cacheTable/cache,        :
+:   :                           : ...)                      : "tableName")              : tuning content.           : uncacheTable/unpersist)   :
+:   :                           : or dataFrame.cache() in   : or dataFrame.cache() and  :                           : is correct; answer omits  :
+:   :                           : an in-memory columnar     : uncaches using            :                           : SQL CACHE TABLE/UNCACHE   :
+:   :                           : format. To uncache, use   : spark.catalog.uncacheTabl :                           : TABLE and clearCache(),   :
+:   :                           : spark.catalog.uncacheTabl : e("tableName")            :                           : which are mentioned in    :
+:   :                           : e(...)                    : or dataFrame.unpersist(), :                           : the broader docs.         :
+:   :                           : or dataFrame.unpersist(). : explicitly referencing    :                           :                           :
+:   :                           :                           : the in-memory columnar    :                           :                           :
+:   :                           :                           : cache and memory removal. :                           :                           :
+:   :                           :                           : Cited Document 4, chunk   :                           :                           :
+:   :                           :                           : 1.                        :                           :                           :
+: 4 : What file formats does    : From the ingested docs    : Listed CSV (using         : Relevant – retrieval      : Partially accurate –      :
+:   : Spark natively support in : the main formats are CSV, : spark.read().csv("file_na : pulled CSV, JSON, and     : completely correct for    :
+:   : this corpus, and how does : JSON, and Parquet; Spark  : me")),                    : Parquet sections plus     : CSV/JSON/Parquet in the   :
+:   : it read them?             : reads them using          : JSON                      : generic load/save         : provided docs, but does   :
+:   :                           : spark.read().csv(...),    : (spark.read().json("file_ : options.                  : not mention ORC/text/Avro :
+:   :                           : spark.read().json(...),   : name")),                  :                           : even though those exist   :
+:   :                           : and                       : and Parquet (Spark can    :                           : in broader Spark docs but :
+:   :                           : spark.read().parquet(...) : read and write Parquet    :                           : are not fully represented :
+:   :                           : ,                         : while preserving schema), :                           : in this extracted corpus. :
+:   :                           : with behavior customized  : and explained that these  :                           :                           :
+:   :                           : via .option() or          : use spark.read methods    :                           :                           :
+:   :                           : .options().               : and can be customized     :                           :                           :
+:   :                           :                           : with option(). Cited      :                           :                           :
+:   :                           :                           : Documents 12, 9, and 7.   :                           :                           :
+: 5 : How to tune               : Either tune               : Explained that for large  : Relevant – retrieval      : Accurate – focuses on     :
+:   : spark.sql.shuffle.partiti : spark.sql.shuffle.partiti : joins you should set a    : surfaced the “Optimizing  : AQE-based tuning instead  :
+:   : ons                       : ons                       : sufficiently large        : Join Strategy” section    : of manual static          :
+:   : for a large join?         : directly via              : initial number of shuffle : describing AQE coalescing : partition count, which    :
+:   :                           : spark.conf.set(...), or,  : partitions and enable     : of shuffle partitions,    : matches the guidance in   :
+:   :                           : as the docs suggest,      : adaptive query execution  : plus related              : the ingested docs.        :
+:   :                           : start with a large        : (spark.sql.adaptive.enabl : join/partition configs.   :                           :
+:   :                           : initial partition count   : ed                        :                           :                           :
+:   :                           : and let Adaptive Query    : and                      :                           :                           :
+:   :                           : Execution coalesce        : spark.sql.adaptive.coales :                           :                           :
+:   :                           : partitions using          : cePartitions.enabled),    :                           :                           :
+:   :                           : spark.sql.adaptive.coales : letting Spark coalesce    :                           :                           :
+:   :                           : cePartitions.*            : post-shuffle partitions   :                           :                           :
+:   :                           : settings.                 : based on runtime stats,   :                           :                           :
+:   :                           :                           : and mentioned related     :                           :                           :
+:   :                           :                           : settings like             :                           :                           :
+:   :                           :                           : initialPartitionNum and   :                           :                           :
+:   :                           :                           : minPartitionSize. Cited   :                           :                           :
+:   :                           :                           : Document 5, chunks 8–9    :                           :                           :
+:   :                           :                           : and Document 6.           :                           :                           :
+:...:...........................:...........................:...........................:...........................:...........................:
+```
 
-
-
+<!-- 
 .................................................................................................................................................
 : # :         Question          :  Expected answer (short)  :      System response      :     Retrieval quality     :     Response accuracy     :
 :   :                           :                           :       (summarized)        :                           :                           :
@@ -199,7 +285,7 @@ When building the context string, each chunk is tagged with its doc_id and chunk
 :   :                           :                           : minPartitionSize. Cited   :                           :                           :
 :   :                           :                           : Document 5, chunks 8–9    :                           :                           :
 :   :                           :                           : and Document 6.           :                           :                           :
-:...:...........................:...........................:...........................:...........................:...........................:
+:...:...........................:...........................:...........................:...........................:...........................: -->
 
 
 <!-- | # | Question | Expected answer | System response (summarized) | Retrieval quality | Response accuracy |
