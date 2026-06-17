@@ -1,4 +1,4 @@
-# The Unofficial Guide for Apache Spark (Project 1)
+# The Unofficial Guide for Apache Spark
 
 <!-- > **How to use this template:**
 > Complete each section *after* you've built and tested the corresponding part of your system.
