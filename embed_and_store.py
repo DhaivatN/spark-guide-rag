@@ -73,7 +73,7 @@ if __name__ == "__main__":
 
     for q in test_queries:
         print("\n=== QUERY:", q)
-        res = retrieve(q, k=5)
+        res = retrieve(q, k=5) # top 5 chunks
         for doc, meta, dist in zip(res["documents"][0], res["metadatas"][0], res["distances"][0]):
             print("----")
             print(meta["doc_id"], "chunk", meta["chunk_id"], "distance:", dist)
